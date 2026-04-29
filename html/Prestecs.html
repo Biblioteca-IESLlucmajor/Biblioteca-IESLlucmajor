@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ca">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestió de Préstecs - IES Llucmajor</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1A2632",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+    </style>
+    <style>
+        .p-6 { padding: 1rem !important; }
+        .p-5 { padding: 0.9rem !important; }
+        .p-4 { padding: 0.6rem !important; }
+        .py-4 { padding-top: 0.6rem !important; padding-bottom: 0.6rem !important; }
+        .px-6 { padding-left: 0.8rem !important; padding-right: 0.8rem !important; }
+        .gap-8 { gap: 1.25rem !important; }
+        .gap-4 { gap: 0.6rem !important; }
+        .gap-3 { gap: 0.45rem !important; }
+        .space-y-4 > * + * { margin-top: 0.5rem !important; }
+        .size-10 { width: 44px !important; height: 44px !important; }
+        .size-9 { width: 36px !important; height: 36px !important; }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display transition-colors duration-200 overflow-hidden">
+    <div class="flex h-screen w-full relative">
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 z-50 w-64 bg-surface-light dark:bg-surface-dark border-r border-slate-200 dark:border-slate-800 h-full transform -translate-x-full md:translate-x-0 md:relative transition-transform duration-300 ease-in-out">
+            <div class="p-6 pb-2">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 shrink-0 shadow-sm border border-slate-100 dark:border-slate-700"
+                        data-alt="School logo abstract representation"
+                        style='background-image: url("data:image/png;base64,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");'>
+                    </div>
+                    <div class="flex flex-col">
+                        <h1 class="text-slate-900 dark:text-white text-base font-bold leading-tight">IES Llucmajor</h1>
+                        <p class="text-slate-500 dark:text-slate-400 text-xs font-normal">Gestió Biblioteca</p>
+                    </div>
+                </div>
+                <nav class="flex flex-col gap-1">
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group"
+                        href="Tauler.html">
+                        <span
+                            class="material-symbols-outlined group-hover:text-primary">dashboard</span>
+                        <span class="text-sm font-medium group-hover:text-slate-900 dark:group-hover:text-slate-200">Tauler</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group"
+                        href="Gest_Lib.html">
+                        <span class="material-symbols-outlined group-hover:text-primary">library_books</span>
+                        <span
+                            class="text-sm font-medium group-hover:text-slate-900 dark:group-hover:text-slate-200">Catàleg</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary group transition-colors"
+                        href="Prestecs.html">
+                        <span class="material-symbols-outlined text-primary group-hover:text-primary fill-1">assignment_return</span>
+                                                <span
+                                                    class="text-sm font-medium">Préstecs</span>
+                                            </a>
+                                            <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group"                                href="Usuaris.html">
+                                <span class="material-symbols-outlined group-hover:text-primary">group</span>
+                                <span
+                                    class="text-sm font-medium group-hover:text-slate-900 dark:group-hover:text-slate-200">Usuaris</span>
+                            </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group"
+                        href="Extra.html">
+                        <span class="material-symbols-outlined group-hover:text-primary">extension</span>
+                        <span
+                            class="text-sm font-medium group-hover:text-slate-900 dark:group-hover:text-slate-200">Extra</span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+        <main class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+            <header
+                class="flex items-center justify-between px-6 py-4 bg-surface-light dark:bg-surface-dark border-b border-slate-200 dark:border-slate-800 shrink-0">
+                <div class="flex items-center gap-4">
+                    <button id="mobile-menu-btn" class="p-2 -ml-2 text-slate-500 hover:text-primary md:hidden">
+                        <span class="material-symbols-outlined">menu</span>
+                    </button>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white">Gestió de Préstecs</h2>
+                </div>
+                <div class="flex items-center gap-6">
+                    <label class="flex relative min-w-[280px]">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <span class="material-symbols-outlined text-slate-400 text-[20px]">search</span>
+                        </div>
+                        <input
+                            id="global-search"
+                            class="w-full h-10 pl-10 pr-4 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm text-slate-900 dark:text-white placeholder:text-slate-500 focus:ring-2 focus:ring-primary/50"
+                            placeholder="Cercar llibres, alumnes..." type="text" />
+                    </label>
+                </div>
+            </header>
+                        <div id="temp-notification" class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-6 py-4 rounded-xl border shadow-2xl text-base font-medium z-[10001] transition-all duration-300 transform"></div>
+            <div class="flex-1 overflow-y-auto p-8">
+        <div class="max-w-6xl mx-auto flex flex-col gap-8 ml-0">
+
+          <div class="flex items-end justify-between gap-4">
+            <div class="flex flex-col gap-1">
+              <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Llistat de Préstecs</h1>
+              <p class="text-sm text-slate-500 dark:text-slate-400">Gestiona els préstecs actius i devolucions.</p>
+            </div>
+            <div class="flex gap-3">
+                <button id="return-loan-btn"
+                  class="flex items-center justify-center gap-2 px-4 h-10 bg-emerald-600 text-white rounded-lg text-sm font-bold hover:bg-emerald-700 transition-all shadow-sm">
+                  <span class="material-symbols-outlined text-[20px]">assignment_returned</span>
+                  <span>Retornar préstec</span>
+                </button>
+                <button id="register-loan-btn"
+                  class="flex items-center justify-center gap-2 px-4 h-10 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary/90 transition-all shadow-sm">
+                  <span class="material-symbols-outlined text-[20px]">add</span>
+                  <span>Registrar préstec</span>
+                </button>
+            </div>
+          </div>
+
+          <div
+            class="flex gap-4 items-center justify-between bg-surface-light dark:bg-surface-dark p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <label class="relative w-96">
+              <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <span class="material-symbols-outlined text-slate-400 text-[20px]">search</span>
+              </div>
+              <input id="loan-search"
+                class="w-full h-10 pl-10 pr-4 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm text-slate-900 dark:text-white placeholder:text-slate-500 focus:ring-2 focus:ring-primary/50"
+                placeholder="Cerca per llibre, alumne..." type="text" />
+            </label>
+            <div class="flex gap-2 w-auto">
+              <select id="filter-loan-status"
+                class="w-48 h-10 items-center justify-center gap-x-2 rounded-lg border border-[#cfdbe7] dark:border-gray-700 bg-white dark:bg-transparent px-3 hover:bg-slate-50 dark:hover:bg-gray-800 transition-colors text-[#0d141b] dark:text-gray-300 text-sm font-medium focus:ring-2 focus:ring-primary/50 cursor-pointer">
+                <option value="">Tots els Estats</option>
+                <option value="active">Actiu</option>
+                <option value="overdue">Vençut</option>
+              </select>
+            </div>
+          </div>
+
+          <div
+            class="w-full overflow-hidden rounded-xl border border-[#cfdbe7] dark:border-gray-800 shadow-sm bg-white dark:bg-[#15202b]">
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[800px]">
+                <thead>
+                  <tr class="bg-slate-50 dark:bg-gray-900/50 border-b border-[#cfdbe7] dark:border-gray-800">
+                    <th
+                      class="px-6 py-4 text-left text-xs font-bold text-[#4c739a] dark:text-gray-400 uppercase tracking-wider">
+                      Llibre</th>
+                    <th
+                      class="px-6 py-4 text-left text-xs font-bold text-[#4c739a] dark:text-gray-400 uppercase tracking-wider">
+                      Alumne</th>
+                    <th
+                      class="px-6 py-4 text-left text-xs font-bold text-[#4c739a] dark:text-gray-400 uppercase tracking-wider">
+                      Data Préstec</th>
+                    <th
+                      class="px-6 py-4 text-left text-xs font-bold text-[#4c739a] dark:text-gray-400 uppercase tracking-wider">
+                      Data Venciment</th>
+                    <th
+                      class="px-6 py-4 text-left text-xs font-bold text-[#4c739a] dark:text-gray-400 uppercase tracking-wider w-32">
+                      Estat</th>
+                    <th
+                      class="px-6 py-4 text-right text-xs font-bold text-[#4c739a] dark:text-gray-400 uppercase tracking-wider w-24">
+                      Accions</th>
+                  </tr>
+                </thead>
+                <tbody id="loans-table-body" class="divide-y divide-[#cfdbe7] dark:divide-gray-800">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    </div>
+    </main>
+    </div>
+    <script type="module" src="../js/data.js"></script>
+    <script type="module" src="../js/utils.js"></script>
+    <script type="module" src="../js/dashboard.js"></script>
+    <script type="module" src="../js/modals.js"></script>
+    <script type="module" src="../js/search.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="../js/email-config.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // Inicialitzar EmailJS si la configuració existeix i no són els valors per defecte
+            if (typeof emailjs !== 'undefined' && window.EMAILJS_CONFIG) {
+                if (window.EMAILJS_CONFIG.PUBLIC_KEY && !window.EMAILJS_CONFIG.PUBLIC_KEY.includes('PON_AQUI')) {
+                    emailjs.init({ publicKey: window.EMAILJS_CONFIG.PUBLIC_KEY });
+                    console.log("EmailJS inicialitzat.");
+                } else {
+                    console.warn("EmailJS no configurat. Revisa js/email-config.js");
+                }
+            }
+        })();
+    </script>
+
+    <script type="module" src="../js/main.js"></script>
+</body>
+
+</html>
